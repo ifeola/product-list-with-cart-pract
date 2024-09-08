@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,12 +26,23 @@
 
         <aside>
           <div class="cart">
-            <h2>Your Cart(0)</h2>
-            <div class="cart__details">
-              <img
-                src="/assets/images/illustration-empty-cart.svg"
-                alt="Empty cart image" />
-              <p>Your added items will appear here</p>
+            <h2>Your Cart (<span class="items__count">0</span>)</h2>
+            <div class="cart__inactive">
+              <div class="cart__details">
+                <img
+                  src="/assets/images/illustration-empty-cart.svg"
+                  alt="Empty cart image" />
+                <p>Your added items will appear here</p>
+              </div>
+            </div>
+            <div class="cart__active">
+              <ul class="cart__list"></ul>
+              <div class="total">
+                <span>Order Total</span>
+                <h2>$<span class="grand-total">0</span></h2>
+              </div>
+              <p class="desc">This is a <span>carbon-neutral</span> delivery</p>
+              <button class="confirm-order">Confirm Order</button>
             </div>
           </div>
         </aside>
@@ -42,6 +55,6 @@
       Coded by <a href="https://abayome.netlify.app">Arogunmasa Abayomi</a>.
     </div>
 
-    <script type="module" src="/public/index.js"></script>
+    <script src="/public/index.js"></script>
   </body>
 </html>

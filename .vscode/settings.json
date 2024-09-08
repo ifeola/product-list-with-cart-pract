@@ -1,4 +1,6 @@
 {
   "liveServer.settings.port": 5501,
-  "workbench.activityBar.orientation": "vertical"
+  "workbench.activityBar.orientation": "vertical",
+  "editor.fontFamily": "Fira Code",
+  "editor.fontWeight": "normal"
 }
