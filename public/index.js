@@ -2,7 +2,10 @@
 const productList = document.querySelector(".products__list");
 const cartList = document.querySelector(".cart__list");
 const cart = document.querySelector(".cart");
+const checkoutBtn = document.querySelector('.checkout__btn');
 const confirmOder = document.querySelector('.confirm-order');
+const checkoutList = document.querySelector(".checkout__list");
+const checkout = document.querySelector(".checkout-bg");
 const count = 0;
 class Product {
     constructor(image, name, category, price) {
@@ -34,6 +37,7 @@ class UI {
         liEl.innerHTML = `
       <div class="product__img">
         <img
+          class="product__image"
           src=${product.image.desktop}
           alt=${product.category} />
         <div class="add-to-cart">
@@ -60,7 +64,7 @@ class UI {
         </div>
       </div>
       <div class="product__content">
-        <span class"product__category">${product.category}</span>
+        <span class="product__category">${product.category}</span>
         <h3 class="product__name">${product.name}</h3>
         <h4>$<span class="product__price">${product.price}</span></h4>
       </div>
@@ -89,6 +93,8 @@ class UI {
         var _a, _b;
         let productName = (_a = product.querySelector(".product__name")) === null || _a === void 0 ? void 0 : _a.textContent;
         let productPrice = Number((_b = product.querySelector(".product__price")) === null || _b === void 0 ? void 0 : _b.textContent);
+        let productImg = product.querySelector(".product__image");
+        UI.updateCheckout(productName, productPrice, productImg.src);
         UI.createOrder(productName, productPrice);
     }
     static createOrder(productName, productPrice) {
@@ -157,6 +163,7 @@ class UI {
     static updateUnit(count, target) {
         var _a, _b, _c;
         let cartItems = Array.from(cartList.children);
+        let checkoutItems = Array.from(checkoutList.children);
         let targetParentTitle = (_c = (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.closest('.product__item')) === null || _b === void 0 ? void 0 : _b.querySelector('.product__name')) === null || _c === void 0 ? void 0 : _c.textContent;
         cartItems.forEach(item => {
             var _a;
@@ -169,6 +176,20 @@ class UI {
                 itemTotal.textContent = String(Number(unit === null || unit === void 0 ? void 0 : unit.textContent) * count);
                 if (itemCount.textContent === "0") {
                     cartList.removeChild(item);
+                }
+            }
+        });
+        checkoutItems.forEach(item => {
+            var _a;
+            let itemTitle = (_a = item.querySelector('.item__title')) === null || _a === void 0 ? void 0 : _a.textContent;
+            if (itemTitle === targetParentTitle) {
+                let itemCount = item.querySelector(".unit");
+                itemCount.textContent = String(count);
+                let unit = item.querySelector(".unit-price");
+                let itemTotal = item.querySelector(".total-price");
+                itemTotal.textContent = String(Number(unit === null || unit === void 0 ? void 0 : unit.textContent) * count);
+                if (itemCount.textContent === "0") {
+                    checkoutList.removeChild(item);
                 }
             }
         });
@@ -199,7 +220,10 @@ class UI {
             return previousValue + nextValue;
         }, 0);
         const itemsTotal = cart.querySelector('.grand-total');
+        const checkoutTotal = checkout.querySelector('.grand-total');
+        console.log(checkoutTotal);
         itemsTotal.textContent = String(grandTotal);
+        checkoutTotal.textContent = String(grandTotal);
     }
     static cartToggle(cartList) {
         const cartInactive = document.querySelector('.cart__inactive');
@@ -215,23 +239,34 @@ class UI {
     }
     static removeCartItem(target) {
         var _a;
+        let checkoutItems = Array.from(checkoutList.children);
         if (target.classList.contains('cart-delete-btn')) {
             const cartItem = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.closest('.cart__item');
+            // Get cart item title
+            const cartTitle = cartItem.querySelector('.item__title');
             // Get item price and item unit count
             const cartItemPrice = cartItem.querySelector('.total-price');
             const cartItemUnit = cartItem.querySelector('.unit');
             // Get Total price and total unit count
             const totalPrice = cart.querySelector('.grand-total');
+            const checkoutTotalPrice = checkout.querySelector('.grand-total');
             const totalUnit = cart.querySelector('.items__count');
             // Set Grand total
             let totalRemaining = Number(totalPrice.textContent) - Number(cartItemPrice.textContent);
             totalPrice.textContent = totalRemaining.toString();
+            checkoutTotalPrice.textContent = totalRemaining.toString();
             // Set Unit total
             let unitRemaining = Number(totalUnit.textContent) - Number(cartItemUnit.textContent);
             totalUnit.textContent = unitRemaining.toString();
             let cartItemHeading = cartItem.querySelector('.item__title');
             UI.resetProductItem(cartItemHeading);
             // Remove cart item from cart lists
+            checkoutItems.forEach(item => {
+                var _a;
+                if (((_a = item.querySelector('.item__title')) === null || _a === void 0 ? void 0 : _a.textContent) === cartTitle.textContent) {
+                    checkoutList.removeChild(item);
+                }
+            });
             cartList.removeChild(cartItem);
         }
         UI.cartToggle(cartList);
@@ -250,6 +285,25 @@ class UI {
             }
         });
     }
+    static updateCheckout(productName, productPrice, productImg) {
+        const checkoutItem = document.createElement("li");
+        checkoutItem.classList.add('checkout__item');
+        checkoutItem.innerHTML = `
+      <div class="checkout__content">
+        <img src="${productImg}" class="checkout__img"/>
+        <div>
+          <h3 class="item__title">${productName}</h3>
+          <div class="unit-bg">
+            <span><span class="unit">${1}</span>x</span>
+            <div class="unit-price-bg">@ $<span class="unit-price">${productPrice}</span></div>
+          </div>
+        </div>
+      </div>
+      <h4>$<span class="total-price">${productPrice}</span></h4>
+      `;
+        checkoutList.appendChild(checkoutItem);
+        // UI.cartToggle(cartList);
+    }
 }
 document.addEventListener('DOMContentLoaded', UI.fetchData);
 productList.addEventListener('click', (e) => {
@@ -264,7 +318,10 @@ cartList.addEventListener('click', (e) => {
     const target = e.target;
     UI.removeCartItem(target);
 });
-confirmOder.addEventListener('click', (e) => {
+confirmOder.addEventListener('click', () => {
+    checkout.classList.add('active');
+});
+checkoutBtn.addEventListener('click', (e) => {
     // Get Total price and total unit count
     const totalPrice = cart.querySelector('.grand-total');
     const totalUnit = cart.querySelector('.items__count');
@@ -278,5 +335,7 @@ confirmOder.addEventListener('click', (e) => {
     totalPrice.textContent = String(0);
     totalUnit.textContent = String(0);
     cartList.innerHTML = "";
+    checkoutList.innerHTML = "";
+    checkout.classList.remove('active');
     UI.cartToggle(cartList);
 });

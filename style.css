@@ -55,6 +55,10 @@ svg {
   width: 1.5rem;
 }
 
+main {
+  position: relative;
+}
+
 .container {
   width: 88%;
   padding-block: 2.5rem;
@@ -201,8 +205,13 @@ ul {
 .product__content {
   margin-top: 1.5rem;
 
-  #products__price {
-    display: inline-block;
+  .product__category {
+    color: var(--Rose-400);
+    font-size: smaller;
+  }
+
+  h4 {
+    color: var(--Red);
   }
 }
 
@@ -281,6 +290,7 @@ aside {
   }
 }
 
+.checkout__btn,
 .confirm-order {
   background-color: var(--Red);
   color: var(--Rose-50);
@@ -294,6 +304,7 @@ aside {
   transition: background-color 150ms ease;
 }
 
+.checkout__btn:hover,
 .confirm-order:hover {
   background-color: var(--hover-red);
 }
@@ -319,4 +330,87 @@ aside {
 
 .cart__active.active {
   display: block;
+}
+
+/* Checkout */
+.checkout-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: hsla(0, 0%, 0%, 0.192);
+  display: none;
+  place-items: center;
+}
+
+.checkout {
+  display: grid;
+  gap: 1.5rem;
+  width: 32%;
+  min-width: 320px;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+
+  .checkout__top {
+    margin: 0;
+
+    h1 {
+      margin-block: 0.5rem;
+    }
+  }
+
+  img {
+    width: 2.5rem;
+  }
+
+  .checkout__list {
+    display: grid;
+    border-radius: 8px;
+  }
+
+  .checkout__middle {
+    background-color: var(--Rose-50);
+    padding-inline: 1rem;
+  }
+
+  .checkout__item {
+    display: grid;
+    align-items: center;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--Rose-100);
+    grid-template-columns: 1fr auto;
+
+    h3 {
+      font-size: 0.875rem;
+    }
+  }
+
+  .checkout__content {
+    display: flex;
+    align-items: cente;
+    gap: 0.25rem;
+  }
+
+  .unit-bg {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .total {
+    padding-block-end: 1rem;
+  }
+}
+
+.checkout-bg.active {
+  display: grid;
+}
+
+.attribution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
