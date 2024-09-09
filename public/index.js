@@ -2,6 +2,7 @@
 const productList = document.querySelector(".products__list");
 const cartList = document.querySelector(".cart__list");
 const cart = document.querySelector(".cart");
+const confirmOder = document.querySelector('.confirm-order');
 const count = 0;
 class Product {
     constructor(image, name, category, price) {
@@ -97,15 +98,14 @@ class UI {
         <div class="cart__content">
           <h3 class="item__title">${productName}</h3>
           <div>
-            <div>
-              <span class="unit">${1}</span>
-              <span>x</span>
+            <div class="unit-bg">
+              <span class="unit">${1}</span><span>x</span>
             </div>
-            <div>$<span class="unit-price">${productPrice}</span></div>
+            <div class="unit-price-bg">@ $<span class="unit-price">${productPrice}</span></div>
             <h4>$<span class="total-price">${productPrice}</span></h4>
           </div>
         </div>
-        <button class="cart-btn">
+        <button class="cart-delete-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -119,7 +119,7 @@ class UI {
         </button>
       `;
         cartList.appendChild(cartItem);
-        UI.cartToggle();
+        UI.cartToggle(cartList);
     }
     static increaseCount(target) {
         if (target.id === "increase-count") {
@@ -132,7 +132,7 @@ class UI {
             UI.updateUnit(count, target);
             UI.updateItemCount();
             UI.updateGrandTotal();
-            UI.cartToggle();
+            UI.cartToggle(cartList);
         }
     }
     static decreaseCount(target) {
@@ -151,7 +151,7 @@ class UI {
             UI.updateUnit(count, target);
             UI.updateItemCount();
             UI.updateGrandTotal();
-            UI.cartToggle();
+            UI.cartToggle(cartList);
         }
     }
     static updateUnit(count, target) {
@@ -163,13 +163,9 @@ class UI {
             let itemTitle = (_a = item.querySelector('.item__title')) === null || _a === void 0 ? void 0 : _a.textContent;
             if (itemTitle === targetParentTitle) {
                 let itemCount = item.querySelector(".unit");
-                if (!itemCount)
-                    return;
                 itemCount.textContent = String(count);
                 let unit = item.querySelector(".unit-price");
                 let itemTotal = item.querySelector(".total-price");
-                if (!itemTotal)
-                    return;
                 itemTotal.textContent = String(Number(unit === null || unit === void 0 ? void 0 : unit.textContent) * count);
                 if (itemCount.textContent === "0") {
                     cartList.removeChild(item);
@@ -205,7 +201,7 @@ class UI {
         const itemsTotal = cart.querySelector('.grand-total');
         itemsTotal.textContent = String(grandTotal);
     }
-    static cartToggle() {
+    static cartToggle(cartList) {
         const cartInactive = document.querySelector('.cart__inactive');
         const cartActive = document.querySelector('.cart__active');
         if (cartList.children.length >= 1) {
@@ -217,6 +213,43 @@ class UI {
             cartActive.classList.remove('active');
         }
     }
+    static removeCartItem(target) {
+        var _a;
+        if (target.classList.contains('cart-delete-btn')) {
+            const cartItem = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.closest('.cart__item');
+            // Get item price and item unit count
+            const cartItemPrice = cartItem.querySelector('.total-price');
+            const cartItemUnit = cartItem.querySelector('.unit');
+            // Get Total price and total unit count
+            const totalPrice = cart.querySelector('.grand-total');
+            const totalUnit = cart.querySelector('.items__count');
+            // Set Grand total
+            let totalRemaining = Number(totalPrice.textContent) - Number(cartItemPrice.textContent);
+            totalPrice.textContent = totalRemaining.toString();
+            // Set Unit total
+            let unitRemaining = Number(totalUnit.textContent) - Number(cartItemUnit.textContent);
+            totalUnit.textContent = unitRemaining.toString();
+            let cartItemHeading = cartItem.querySelector('.item__title');
+            UI.resetProductItem(cartItemHeading);
+            // Remove cart item from cart lists
+            cartList.removeChild(cartItem);
+        }
+        UI.cartToggle(cartList);
+    }
+    static resetProductItem(title) {
+        let productLists = Array.from(productList.children);
+        productLists.forEach(productList => {
+            let productTitle = productList.querySelector('.product__name');
+            if (productTitle.textContent === title.textContent) {
+                const addToCartBtn = productList.querySelector('.add-to-cart-btn');
+                const counterBtn = productList.querySelector('.counter');
+                const count = productList.querySelector('.count');
+                count.textContent = String(0);
+                counterBtn.classList.remove('active');
+                addToCartBtn.classList.remove('inactive');
+            }
+        });
+    }
 }
 document.addEventListener('DOMContentLoaded', UI.fetchData);
 productList.addEventListener('click', (e) => {
@@ -226,4 +259,24 @@ productList.addEventListener('click', (e) => {
     UI.increaseCount(target);
     // Increase the Count of each cart list
     UI.decreaseCount(target);
+});
+cartList.addEventListener('click', (e) => {
+    const target = e.target;
+    UI.removeCartItem(target);
+});
+confirmOder.addEventListener('click', (e) => {
+    // Get Total price and total unit count
+    const totalPrice = cart.querySelector('.grand-total');
+    const totalUnit = cart.querySelector('.items__count');
+    // Get productList titles
+    const cartListItems = Array.from(cartList.children);
+    cartListItems.forEach(listItem => {
+        let listTitle = listItem.querySelector('.item__title');
+        UI.resetProductItem(listTitle);
+    });
+    // Set Grand and Unit total
+    totalPrice.textContent = String(0);
+    totalUnit.textContent = String(0);
+    cartList.innerHTML = "";
+    UI.cartToggle(cartList);
 });

@@ -2,6 +2,7 @@
 
 :root {
   --Red: hsl(14, 86%, 42%);
+  --hover-red: hsl(14, 85%, 32%);
   --Green: hsl(159, 69%, 38%);
 
   --Rose-50: hsl(20, 50%, 98%);
@@ -116,7 +117,7 @@ ul {
   left: 50%;
   transform: translateX(-50%);
   display: grid;
-  width: min(56%, 8rem);
+  width: min(60%, 10rem);
 }
 
 .add-to-cart-btn {
@@ -133,11 +134,16 @@ ul {
   border-radius: 100vw;
   margin-inline: auto;
   text-wrap: nowrap;
+  transition: color 150ms ease;
 
   img,
   span {
     pointer-events: none;
   }
+}
+
+.add-to-cart-btn:hover {
+  color: var(--Red);
 }
 
 .add-to-cart-btn.inactive {
@@ -169,6 +175,15 @@ ul {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+
+  button:hover {
+    background-color: var(--Rose-50);
+
+    svg {
+      stroke: var(--Red);
+    }
   }
 
   svg {
@@ -214,29 +229,32 @@ aside {
   border-bottom: 1px solid var(--Rose-100);
   padding-block: 1rem;
 
-  .cart__content div {
+  .cart__content > div {
     display: flex;
     align-items: center;
     gap: 6px;
   }
 
-  .unit {
+  .unit-bg {
     color: var(--Red);
     font-weight: 500;
   }
 
-  .unit-price {
-    margin-left: 4px;
-    color: var(--Rose-300);
+  .unit-price-bg {
+    color: var(--Rose-400);
   }
 
-  .cart-btn {
+  .cart-delete-btn {
     border: none;
     background: none;
     outline: none;
     cursor: pointer;
     width: 1.5rem;
     height: 1.5rem;
+
+    svg {
+      pointer-events: none;
+    }
   }
 }
 
@@ -270,8 +288,14 @@ aside {
   height: 2.5rem;
   width: 100%;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 100vw;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.confirm-order:hover {
+  background-color: var(--hover-red);
 }
 
 .total {
