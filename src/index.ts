@@ -104,6 +104,7 @@ class Product {
       if (target.classList.contains('add-to-cart-btn')) {
         target.classList.add('inactive');
         target.nextElementSibling?.classList.add('active');
+        target.closest('.product__item')?.querySelector('.product__image')?.classList.add('active');
         
         let countContainer = target.nextElementSibling?.querySelector('.count') as HTMLElement;
         let productCount: number = Number(countContainer?.textContent);
@@ -184,6 +185,7 @@ class Product {
         if (count === 0) {
           target.parentElement?.previousElementSibling?.classList.remove('inactive');
           target.parentElement?.classList.remove('active');
+          target.closest('.product__item')?.querySelector('.product__image')?.classList.remove('active');
         }
         UI.updateUnit(count, target)
         UI.updateItemCount()
@@ -330,6 +332,9 @@ class Product {
           const addToCartBtn = productList.querySelector('.add-to-cart-btn') as HTMLButtonElement;
           const counterBtn = productList.querySelector('.counter') as HTMLButtonElement;
           const count = productList.querySelector('.count') as HTMLSpanElement;
+          const productImage = productList.querySelector('.product__image') as HTMLImageElement;
+
+          productImage.classList.remove('active');
 
           count.textContent = String(0);
           counterBtn.classList.remove('active');

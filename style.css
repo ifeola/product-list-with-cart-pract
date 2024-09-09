@@ -111,13 +111,25 @@ ul {
   border-radius: 10px;
 }
 
+.product__image {
+  height: 10rem;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border: 1px solid transparent;
+}
+
+.product__image.active {
+  border-color: var(--Red);
+}
+
 .product__img {
   position: relative;
 }
 
 .add-to-cart {
   position: absolute;
-  bottom: -0.8rem;
+  bottom: -1rem;
   left: 50%;
   transform: translateX(-50%);
   display: grid;
@@ -128,7 +140,7 @@ ul {
   background-color: var(--Rose-50);
   border: 1px solid var(--Red);
   cursor: pointer;
-  height: 2.25rem;
+  height: 2.8rem;
   width: 100%;
   padding-inline: 1rem;
   display: flex;
@@ -157,7 +169,7 @@ ul {
 .counter {
   background-color: var(--Red);
   width: 100%;
-  height: 2.25rem;
+  height: 2.8rem;
   border-radius: 100vw;
   padding-inline: 1rem;
   align-items: center;
@@ -295,7 +307,7 @@ aside {
   background-color: var(--Red);
   color: var(--Rose-50);
   border: none;
-  height: 2.5rem;
+  height: 3rem;
   width: 100%;
   text-align: center;
   font-weight: 600;
@@ -341,7 +353,9 @@ aside {
   width: 100%;
   background-color: hsla(0, 0%, 0%, 0.192);
   display: none;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
 }
 
 .checkout {
@@ -368,6 +382,20 @@ aside {
   .checkout__list {
     display: grid;
     border-radius: 8px;
+    max-height: 16rem;
+    overflow: auto;
+  }
+
+  .checkout__list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .checkout__list::-webkit-scrollbar-track {
+    background-color: var(--Rose-50);
+  }
+
+  .checkout__list::-webkit-scrollbar-thumb {
+    background-color: var(--Rose-300);
   }
 
   .checkout__middle {
@@ -406,11 +434,37 @@ aside {
 }
 
 .checkout-bg.active {
-  display: grid;
+  display: flex;
 }
 
 .attribution {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (width <= 375px) {
+  .checkout-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100dvh;
+    align-items: flex-end;
+    transition: bottom;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .checkout {
+    width: 100%;
+  }
+
+  .product__image {
+    height: 13rem;
+    width: 100%;
+    object-fit: cover;
+    border: 1px solid transparent;
+  }
 }

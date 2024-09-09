@@ -73,11 +73,12 @@ class UI {
         productList.appendChild(liEl);
     }
     static getProduct(target) {
-        var _a, _b;
+        var _a, _b, _c, _d;
         if (target.classList.contains('add-to-cart-btn')) {
             target.classList.add('inactive');
             (_a = target.nextElementSibling) === null || _a === void 0 ? void 0 : _a.classList.add('active');
-            let countContainer = (_b = target.nextElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector('.count');
+            (_c = (_b = target.closest('.product__item')) === null || _b === void 0 ? void 0 : _b.querySelector('.product__image')) === null || _c === void 0 ? void 0 : _c.classList.add('active');
+            let countContainer = (_d = target.nextElementSibling) === null || _d === void 0 ? void 0 : _d.querySelector('.count');
             let productCount = Number(countContainer === null || countContainer === void 0 ? void 0 : countContainer.textContent);
             productCount++;
             if (!countContainer)
@@ -142,7 +143,7 @@ class UI {
         }
     }
     static decreaseCount(target) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         if (target.id === "decrease-count") {
             let countEl = target.nextElementSibling;
             let count = Number(countEl.textContent);
@@ -153,6 +154,7 @@ class UI {
             if (count === 0) {
                 (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.previousElementSibling) === null || _b === void 0 ? void 0 : _b.classList.remove('inactive');
                 (_c = target.parentElement) === null || _c === void 0 ? void 0 : _c.classList.remove('active');
+                (_e = (_d = target.closest('.product__item')) === null || _d === void 0 ? void 0 : _d.querySelector('.product__image')) === null || _e === void 0 ? void 0 : _e.classList.remove('active');
             }
             UI.updateUnit(count, target);
             UI.updateItemCount();
@@ -279,6 +281,8 @@ class UI {
                 const addToCartBtn = productList.querySelector('.add-to-cart-btn');
                 const counterBtn = productList.querySelector('.counter');
                 const count = productList.querySelector('.count');
+                const productImage = productList.querySelector('.product__image');
+                productImage.classList.remove('active');
                 count.textContent = String(0);
                 counterBtn.classList.remove('active');
                 addToCartBtn.classList.remove('inactive');
